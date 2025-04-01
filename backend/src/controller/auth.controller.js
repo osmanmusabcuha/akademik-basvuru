@@ -9,12 +9,10 @@ import { userRoles } from "../db/schema/userRoles.js";
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
-// Sign Up
 export const signUp = async (req, res) => {
   const { name, email, tcNo, password } = req.body;
 
   try {
-    // Check if user already exists
     const existingUser = await db
       .select()
       .from(users)
@@ -24,10 +22,9 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    // Create new user
+
     const newUser = await db
       .insert(users)
       .values({
@@ -52,10 +49,13 @@ export const signUp = async (req, res) => {
       });
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ id: userId }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign(
+      { id: userId, role: defaultRole[0].name },
+      JWT_SECRET,
+      {
+        expiresIn: JWT_EXPIRES_IN,
+      }
+    );
 
     newUser[0].role = defaultRole[0].name;
 
@@ -70,7 +70,7 @@ export const signUp = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error checking user existence", error });
+      .json({ message: "Error checking user existence", error: error.message });
   }
 };
 
@@ -79,7 +79,6 @@ export const signIn = async (req, res) => {
   const { tcNo, password } = req.body;
 
   try {
-    // Check if user exists
     const existingUser = await db
       .select()
       .from(users)
@@ -101,15 +100,17 @@ export const signIn = async (req, res) => {
       .from(userRoles)
       .innerJoin(roles, eq(userRoles.roleId, roles.id))
       .where(eq(userRoles.userId, existingUser[0].id));
-    console.log(userRole);
     if (userRole.length > 0) {
       existingUser[0].role = userRole[0].roles.name;
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ id: existingUser[0].id }, JWT_SECRET, {
-      expiresIn: JWT_EXPIRES_IN,
-    });
+    const token = jwt.sign(
+      { id: existingUser[0].id, role: existingUser[0].role },
+      JWT_SECRET,
+      {
+        expiresIn: JWT_EXPIRES_IN,
+      }
+    );
 
     res.status(200).json({
       success: true,
@@ -120,12 +121,12 @@ export const signIn = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).json({ message: "Error during login", error });
+    return res
+      .status(500)
+      .json({ message: "Error during login", error: error.message });
   }
 };
 
-// Sign Out
 export const signOut = async (req, res) => {
-  // Invalidate the token on the client side (e.g., remove it from storage)
   res.status(200).json({ message: "Sign out successful" });
 };
