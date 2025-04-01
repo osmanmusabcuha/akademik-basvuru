@@ -1,27 +1,14 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { eq } from "drizzle-orm";
-import { usersTable } from "./db/schema.js";
+import express from "express";
 
-const db = drizzle(process.env.DATABASE_URL || "");
+const app = express();
+const port = 3000;
 
-async function main() {
-  const user = {
-    name: "John",
-    age: 30,
-    email: "john@example.com",
-  };
+app.use(express.json());
 
-  await db.insert(usersTable).values(user);
-  console.log("New user created!");
-  const users = await db.select().from(usersTable);
-  console.log("Getting all users from the database: ", users);
-  await db
-    .update(usersTable)
-    .set({
-      age: 31,
-    })
-    .where(eq(usersTable.email, user.email));
-  console.log("User info updated!");
-}
-main();
+app.get("/", (req, res) => {
+  res.send("Merhaba, Express uygulaması çalışıyor!");
+});
+
+app.listen(port, () => {
+  console.log(`Sunucu http://localhost:${port} adresinde çalışıyor.`);
+});
