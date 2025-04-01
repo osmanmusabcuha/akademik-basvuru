@@ -6,6 +6,10 @@ const fakeUsers = [
   { email: "juri@site.com", password: "1234", role: "juri" },
   { email: "admin@site.com", password: "1234", role: "admin" },
   { email: "super@site.com", password: "1234", role: "superadmin" },
+  { email: "aday@site.com", password: "1234", role: "aday" },
+  { email: "juri@site.com", password: "1234", role: "juri" },
+  { email: "admin@site.com", password: "1234", role: "admin" },
+  { email: "super@site.com", password: "1234", role: "superadmin" },
 ];
 
 export default function Login() {
