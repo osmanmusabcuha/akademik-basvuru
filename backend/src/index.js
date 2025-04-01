@@ -1,6 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 
+import { authenticateToken } from "./middleware/auth.middleware.js";
+import { authorizeRoles } from "./middleware/role.middleware.js";
+
 import authRouter from "./routes/auth.routes.js";
 
 const app = express();
