@@ -1,7 +1,7 @@
 import { pgTable, serial, integer } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { users } from "./users";
-import { roles } from "./roles";
+import { users } from "./users.js";
+import { roles } from "./roles.js";
 
 export const userRoles = pgTable("user_roles", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
