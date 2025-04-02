@@ -6,7 +6,7 @@ import { applicationQuestions } from "./applicationQuestions.js";
 export const applicationAnswers = pgTable("application_answers", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   applicationId: integer("application_id")
-    .references(() => application.id)
+    .references(() => applications.id)
     .notNull(),
   questionId: integer("question_id")
     .references(() => applicationQuestions.id)
