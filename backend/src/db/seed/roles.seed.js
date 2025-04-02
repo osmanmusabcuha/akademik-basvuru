@@ -1,9 +1,6 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { roles } from "../schema/roles.js";
 import rolesData from "./data/roles.data.js";
-
-const db = drizzle(process.env.DATABASE_URL || "");
+import db from "../index.js";
 
 export const seedRoles = async () => {
   console.log("Checking if roles table already exist...");
