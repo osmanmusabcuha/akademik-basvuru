@@ -7,6 +7,7 @@ export const applicationDocuments = pgTable("application_documents", {
   applicationId: integer("application_id")
     .references(() => applications.id)
     .notNull(),
+  authorRole: varchar("author_role", { length: 255 }).notNull(),
   documentType: varchar("document_type", { length: 255 }).notNull(),
   documentUrl: varchar("document_url", { length: 255 }).notNull(),
 });
