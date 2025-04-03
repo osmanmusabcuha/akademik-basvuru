@@ -13,7 +13,7 @@ const AnnouncementTable = () => {
   return (
     <>
       <Table>
-        <TableCaption>Akademik Başvuru Listesi</TableCaption>
+        <TableCaption>Akademik Başvuru Listesi ...</TableCaption>
         <TableHeader>
           <TableRow className="bg-blue-100 text-green-800 p-4 rounded shadow">
             <TableHead className="w-[100px]">İlan Adı</TableHead>
