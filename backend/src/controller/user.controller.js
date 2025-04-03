@@ -78,20 +78,30 @@ export const updateUser = async (req, res) => {
 
 export const updateUserRole = async (req, res) => {
   const { id } = req.params;
-  const { roleId } = req.body;
+  const { roleName } = req.body;
   try {
-    const updatedRole = await db
+    const role = await db
+      .select()
+      .from(roles)
+      .where(eq(roles.name, roleName))
+      .execute();
+
+    if (role.length === 0) {
+      return res.status(404).json({ message: "Role not found" });
+    }
+
+    const updatedUserRole = await db
       .update(userRoles)
-      .set({ roleId })
+      .set({ roleId: role[0].id })
       .where(eq(userRoles.userId, id))
       .returning()
       .execute();
 
-    if (updatedRole.length === 0) {
+    if (updatedUserRole.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(updatedRole[0]);
+    res.status(200).json(updatedUserRole[0]);
   } catch (error) {
     console.error("Error updating user role:", error);
     res.status(500).json({ message: "Internal server error" });
