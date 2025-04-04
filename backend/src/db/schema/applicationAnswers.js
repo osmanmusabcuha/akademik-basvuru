@@ -12,6 +12,7 @@ export const applicationAnswers = pgTable("application_answers", {
     .references(() => applicationQuestions.id)
     .notNull(),
   answer: varchar("answer", { length: 255 }).notNull(),
+  score: integer("score").notNull(),
   filePath: varchar("file_path", { length: 255 }).notNull(),
 });
 
