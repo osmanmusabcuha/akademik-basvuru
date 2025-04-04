@@ -8,6 +8,7 @@ import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import facultyRouter from "./routes/faculty.routes.js";
 import postingRouter from "./routes/posting.routes.js";
+import applicationRouter from "./routes/application.routes.js";
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/faculties", facultyRouter);
 app.use("/api/postings", postingRouter);
+app.use("/api/applications", applicationRouter);
 
 app.get("/", (req, res) => {
   res.send("Merhaba, Express uygulaması çalışıyor!");
