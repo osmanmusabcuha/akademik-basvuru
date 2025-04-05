@@ -5,14 +5,20 @@ import { eq } from "drizzle-orm";
 import { users } from "../db/schema/users.js";
 import { roles } from "../db/schema/roles.js";
 import { userRoles } from "../db/schema/userRoles.js";
+import verifyTCKN from "../utils/verifyTCKN.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
 export const signUp = async (req, res) => {
-  const { name, email, tcNo, password } = req.body;
+  const { name, email, tcNo, password, surname, birthYear } = req.body;
 
   try {
+    const isValidTC = await verifyTCKN(tcNo, name, surname, birthYear);
+    if (!isValidTC) {
+      return res.status(400).json({ message: "Invalid TC No" });
+    }
+
     const existingUser = await db
       .select()
       .from(users)
@@ -31,6 +37,8 @@ export const signUp = async (req, res) => {
         name,
         email,
         tcNo,
+        surname,
+        birthYear,
         password: hashedPassword,
       })
       .returning();
