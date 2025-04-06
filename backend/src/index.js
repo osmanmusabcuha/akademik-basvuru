@@ -10,6 +10,7 @@ import facultyRouter from "./routes/faculty.routes.js";
 import postingRouter from "./routes/posting.routes.js";
 import applicationRouter from "./routes/application.routes.js";
 import documentsRouter from "./routes/documents.routes.js";
+import juryRouter from "./routes/jury.routes.js";
 
 const app = express();
 const port = 3000;
@@ -24,6 +25,7 @@ app.use("/api/faculties", facultyRouter);
 app.use("/api/postings", postingRouter);
 app.use("/api/applications", applicationRouter);
 app.use("/api/documents", documentsRouter);
+app.use("/api/juries", juryRouter);
 
 app.get("/", (req, res) => {
   res.send("Merhaba, Express uygulaması çalışıyor!");
