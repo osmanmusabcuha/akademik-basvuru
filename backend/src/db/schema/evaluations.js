@@ -1,7 +1,7 @@
 import { pgTable, varchar, integer, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { juries } from "./juries";
-import { applications } from "./applications";
+import { juries } from "./juries.js";
+import { applications } from "./applications.js";
 
 export const evaluations = pgTable("evaluations", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),

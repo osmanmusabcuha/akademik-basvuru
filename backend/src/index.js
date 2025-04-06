@@ -1,8 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-
-import { authenticateToken } from "./middleware/auth.middleware.js";
-import { authorizeRoles } from "./middleware/role.middleware.js";
+import cors from "cors";
 
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
@@ -11,10 +9,12 @@ import postingRouter from "./routes/posting.routes.js";
 import applicationRouter from "./routes/application.routes.js";
 import documentsRouter from "./routes/documents.routes.js";
 import juryRouter from "./routes/jury.routes.js";
+import evaluationRouter from "./routes/evaluation.routes.js";
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -26,6 +26,7 @@ app.use("/api/postings", postingRouter);
 app.use("/api/applications", applicationRouter);
 app.use("/api/documents", documentsRouter);
 app.use("/api/juries", juryRouter);
+app.use("/api/evaluations", evaluationRouter);
 
 app.get("/", (req, res) => {
   res.send("Merhaba, Express uygulaması çalışıyor!");
