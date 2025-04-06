@@ -1,4 +1,4 @@
-import { pgTable, varchar, integer } from "drizzle-orm/pg-core";
+import { pgTable, varchar, integer, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { juries } from "./juries";
 import { applications } from "./applications";
@@ -11,6 +11,7 @@ export const evaluations = pgTable("evaluations", {
   applicationId: integer("application_id")
     .references(() => applications.id)
     .notNull(),
+  comment: text("comment").notNull(),
   decision: varchar("decision", { length: 255 }).notNull(),
   evaluationFilePath: varchar("evaluation_file_path", {
     length: 255,
