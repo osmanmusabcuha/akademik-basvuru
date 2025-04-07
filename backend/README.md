@@ -1,10 +1,10 @@
 # Akademik Başvuru Backend
 
-## Overview
+## Genel Bakıs
 
 Bu proje, akademik başvuru süreçlerini yönetmek için bir backend uygulamasıdır. Kullanıcıların başvurularını oluşturmasını, güncellemesini ve görüntülemesini sağlar.
 
-## Installation
+## Kurulum
 
 ### Gereksinimler
 
