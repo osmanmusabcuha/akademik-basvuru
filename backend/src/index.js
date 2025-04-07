@@ -10,6 +10,7 @@ import applicationRouter from "./routes/application.routes.js";
 import documentsRouter from "./routes/documents.routes.js";
 import juryRouter from "./routes/jury.routes.js";
 import evaluationRouter from "./routes/evaluation.routes.js";
+import questionRouter from "./routes/question.routes.js";
 
 const app = express();
 const port = 3000;
@@ -27,6 +28,7 @@ app.use("/api/applications", applicationRouter);
 app.use("/api/documents", documentsRouter);
 app.use("/api/juries", juryRouter);
 app.use("/api/evaluations", evaluationRouter);
+app.use("/api/questions", questionRouter);
 
 app.get("/", (req, res) => {
   res.send("Merhaba, Express uygulaması çalışıyor!");
