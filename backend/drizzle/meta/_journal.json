@@ -57,6 +57,13 @@
       "when": 1743808532155,
       "tag": "0007_awesome_ultron",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1743976367071,
+      "tag": "0008_smooth_sage",
+      "breakpoints": true
     }
   ]
 }
