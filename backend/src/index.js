@@ -11,6 +11,7 @@ import documentsRouter from "./routes/documents.routes.js";
 import juryRouter from "./routes/jury.routes.js";
 import evaluationRouter from "./routes/evaluation.routes.js";
 import questionRouter from "./routes/question.routes.js";
+import answersRouter from "./routes/answers.routes.js";
 
 const app = express();
 const port = 3000;
@@ -29,6 +30,7 @@ app.use("/api/documents", documentsRouter);
 app.use("/api/juries", juryRouter);
 app.use("/api/evaluations", evaluationRouter);
 app.use("/api/questions", questionRouter);
+app.use("/api/answers", answersRouter);
 
 app.get("/", (req, res) => {
   res.send("Merhaba, Express uygulaması çalışıyor!");
