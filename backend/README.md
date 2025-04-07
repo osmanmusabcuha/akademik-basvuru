@@ -10,7 +10,8 @@ Bu proje, akademik başvuru süreçlerini yönetmek için bir backend uygulamas�
 
 - Node.js (v14 veya üzeri)
 - npm veya yarn
-- MongoDB
+- Postgres
+- MinIO (object storage)
 
 ### Kurulum Adımları
 
