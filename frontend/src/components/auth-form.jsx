@@ -50,7 +50,6 @@ export default function AuthForm({ type, onSubmit, fetchError }) {
     const validation = schema.safeParse(formData);
     if (!validation.success) {
       const errors = {};
-      console.log("Form verileri:", formData);
       validation.error.errors.forEach((error) => {
         errors[error.path[0]] = error.message;
       });
@@ -59,7 +58,6 @@ export default function AuthForm({ type, onSubmit, fetchError }) {
     } else {
       setError({});
       onSubmit(formData);
-      console.log("Form verileri:", formData);
       setSuccess("Başarıyla kaydedildi!");
     }
   };

@@ -17,6 +17,7 @@ export const useAuth = () => {
       console.log("token", { token }, "user", user);
       setAuth(user, token);
       console.log(role);
+      return true;
     } catch (err) {
       setError(err.response?.data?.message || "Kayıt işlemi başarısız.");
       console.log(error);
@@ -33,6 +34,7 @@ export const useAuth = () => {
       console.log("token", { token }, "user", user);
       setAuth(user, token);
       console.log(role);
+      return true;
     } catch (err) {
       setError(err.response?.data?.message || "Giriş işlemi başarısız.");
       console.log(error);
