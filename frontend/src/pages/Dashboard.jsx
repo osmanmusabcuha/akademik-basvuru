@@ -55,6 +55,7 @@ const Dashboard = () => {
           </div>
         </div>
       </section>
+      <section></section>
     </>
   );
 };

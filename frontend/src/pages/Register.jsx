@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import AuthForm from "../components/auth-form";
-import { useAuth } from "../hook/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
 export default function RegisterPage() {
   const { register, error } = useAuth();
@@ -11,7 +11,7 @@ export default function RegisterPage() {
     const success = await register(data);
     if (success) {
       console.log("Kayıt başarılı");
-      navigate("/login");
+      navigate("/dashboard");
     } else {
       console.log("Kayıt başarısız");
     }

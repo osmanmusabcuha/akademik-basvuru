@@ -1,5 +1,5 @@
 import AuthForm from "../components/auth-form";
-import { useAuth } from "../hook/useAuth";
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

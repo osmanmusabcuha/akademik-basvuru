@@ -1,6 +1,17 @@
 import AnnouncementCard from "../components/announcement-card";
+import { useFetch } from "../hooks/use-fetch";
 
 const Home = () => {
+  const { data, error, loading } = useFetch(
+    "http://localhost:3000/api/postings",
+    "GET"
+  );
+
+  const handleButtonClick = (id) => {
+    console.log("Button clicked for item:", id);
+    // Perform any action you want when the button is clicked
+  };
+
   return (
     <>
       <div>
@@ -13,16 +24,26 @@ const Home = () => {
           </div>
         </section>
         <section className="container mx-auto px-6 py-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {[0, 1, 2, 3, 4].map((_, index) => (
-            <div key={index} className="h-full">
-              <AnnouncementCard
-                title="İlan Başlığı"
-                category="doc"
-                startDate="2023-10-01"
-                endDate="2023-10-31"
-              />
-            </div>
-          ))}
+          {loading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          {data &&
+            data.map(
+              (item, index) =>
+                item.requirements.length > 0 && ( // Eğer requirements boş değilse
+                  <div key={index} className="h-full">
+                    <AnnouncementCard
+                      id={item.id}
+                      title={item.title}
+                      category={item.category}
+                      startDate={item.startDate}
+                      endDate={item.endDate}
+                      facultyName={item.facultyName}
+                      requirements={item.requirements}
+                      onClick={(id) => handleButtonClick(id)}
+                    />
+                  </div>
+                )
+            )}
         </section>
       </div>
     </>
