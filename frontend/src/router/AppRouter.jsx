@@ -6,7 +6,7 @@ import Dashboard from "../pages/Dashboard";
 import NotFoundPage from "../pages/NodFound.jsx";
 import UnauthorizedPage from "../pages/Unauthorized.jsx";
 import ManageRoles from "../pages/admin/ManageRoles.jsx";
-import ManagePosting from "../pages/ManagePosting.jsx";
+import ManagePosting from "../pages/admin/ManagePosting.jsx";
 import Posting from "../pages/applicant/Posting.jsx";
 
 import MainLayout from "../layouts/MainLayout";

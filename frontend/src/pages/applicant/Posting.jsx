@@ -13,6 +13,11 @@ const Posting = () => {
     "http://localhost:3000/api/postings",
     "GET"
   );
+  const { data: applicationsData, fetchData: fetchApplicationData } = useFetch(
+    "http://localhost:3000/api/applications/user/" + user.id,
+    "GET",
+    token
+  );
 
   const handleButtonClick = (id) => {
     setPostingId(id);
@@ -36,6 +41,7 @@ const Posting = () => {
           },
         }
       );
+      fetchApplicationData();
       console.log("Onaylandı:", response.data);
     } catch (error) {
       console.error("Onaylama hatası:", error);
@@ -59,28 +65,32 @@ const Posting = () => {
           {loading && <p>Loading...</p>}
           {error && <p>{error}</p>}
           {data &&
-            data.map(
-              (item, index) =>
-                item.requirements.length > 0 && ( // Eğer requirements boş değilse
-                  <div key={index} className="h-full">
-                    <AnnouncementCard
-                      id={item.id}
-                      title={item.title}
-                      category={item.category}
-                      startDate={item.startDate}
-                      endDate={item.endDate}
-                      facultyName={item.facultyName}
-                      requirements={item.requirements}
-                      onClick={(id) => handleButtonClick(id)}
-                    />
-                  </div>
-                )
-            )}
+            data
+              .filter((item) =>
+                applicationsData?.some((app) => app?.postingId !== item?.id)
+              )
+              .map(
+                (item, index) =>
+                  item.requirements.length > 0 && ( // Eğer requirements boş değilse
+                    <div key={index} className="h-full">
+                      <AnnouncementCard
+                        id={item.id}
+                        title={item.title}
+                        category={item.category}
+                        startDate={item.startDate}
+                        endDate={item.endDate}
+                        facultyName={item.facultyName}
+                        requirements={item.requirements}
+                        onClick={(id) => handleButtonClick(id)}
+                      />
+                    </div>
+                  )
+              )}
         </section>
         <ManageDialog open={open} setOpen={setOpen}>
           <div key={postingId} className="flex flex-col gap-4 p-4">
             <div className="flex flex-col text-2xl items-center justify-center h-full">
-              <h2>Basvuruyu Onaylıyormusunuz?</h2>
+              <h2>Başvuruyu onaylıyor musunuz?</h2>
             </div>
             <div className="flex gap-4 items-center justify-center h-full">
               <button
