@@ -5,8 +5,8 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import NotFoundPage from "../pages/NodFound.jsx";
 import UnauthorizedPage from "../pages/Unauthorized.jsx";
-import Users from "../pages/admin/Users.jsx";
-import Posting from "../pages/Posting.jsx";
+import ManageRoles from "../pages/admin/ManageRoles.jsx";
+import ManagePosting from "../pages/ManagePosting.jsx";
 
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -33,18 +33,18 @@ const AppRouter = () => {
           }
         />
         <Route
-          path="users"
+          path="manage-roles"
           element={
             <ProtectedRoute allowRoles={["admin"]}>
-              <Users />
+              <ManageRoles />
             </ProtectedRoute>
           }
         />
         <Route
-          path="postings"
+          path="manage-postings"
           element={
-            <ProtectedRoute allowRoles={["aday", "yonetici", "admin"]}>
-              <Posting />
+            <ProtectedRoute allowRoles={["yonetici", "admin"]}>
+              <ManagePosting />
             </ProtectedRoute>
           }
         />

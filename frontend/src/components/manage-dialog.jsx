@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const AnnouncementDialog = ({ open, onOpenChange, children, title }) => {
+const ManageDialog = ({ open, onOpenChange, children, title }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -19,4 +19,4 @@ const AnnouncementDialog = ({ open, onOpenChange, children, title }) => {
     </Dialog>
   );
 };
-export default AnnouncementDialog;
+export default ManageDialog;

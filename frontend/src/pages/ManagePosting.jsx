@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 
-import AnnouncementCard from "../components/announcement-card";
+import AnnouncementCard from "../components/announcement-card.jsx";
 import { Card } from "@/components/ui/card";
 import { IconFilePlus } from "@tabler/icons-react";
-import AnnouncementDialog from "../components/announcement-dialog";
-import { useFetch } from "../hooks/use-fetch";
+import AnnouncementDialog from "../components/manage-dialog.jsx";
+import { useFetch } from "../hooks/use-fetch.js";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
 import { useAuthStore } from "../store/auth-store.jsx";
-import SelectComp from "../components/select";
+import SelectComp from "../components/select.jsx";
 
 const category = ["Docent", "Dr.Ogr.Uyesi", "Profesor"];
 
-const Posting = () => {
+const ManagePosting = () => {
   const [open, setOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [postingId, setPostingId] = useState(null);
@@ -300,4 +300,4 @@ const Posting = () => {
     </div>
   );
 };
-export default Posting;
+export default ManagePosting;

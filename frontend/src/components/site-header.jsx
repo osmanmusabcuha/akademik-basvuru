@@ -5,7 +5,8 @@ import { useLocation } from "react-router-dom";
 
 const routeMapping = {
   dashboard: "Dashboard",
-  users: "Kullanıcılar",
+  "manage-postings": "İlan Yönetimi",
+  "manage-roles": "Rol Yönetimi",
 };
 
 const formatPath = (path) => {
