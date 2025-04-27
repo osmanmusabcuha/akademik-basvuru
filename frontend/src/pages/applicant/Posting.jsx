@@ -31,7 +31,7 @@ const Posting = () => {
         {
           userId: user.id,
           postingId: postingId,
-          status: "bekliyor",
+          status: "belgeler-bekleniyor",
           applicationDate: new Date().toISOString(),
         },
         {
