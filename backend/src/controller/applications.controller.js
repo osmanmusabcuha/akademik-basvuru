@@ -47,6 +47,48 @@ export const getApplicationById = async (req, res) => {
   }
 };
 
+export const getApplicationsByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const applicationsList = await db
+      .select()
+      .from(applications)
+      .where(eq(applications.userId, userId))
+      .execute();
+
+    if (applicationsList.length === 0) {
+      return res.status(404).json({ message: "No applications found" });
+    }
+
+    res.status(200).json(applicationsList);
+  } catch (error) {
+    console.error("Error fetching applications:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getApplicationsByPostingId = async (req, res) => {
+  const { postingId } = req.params;
+
+  try {
+    const applicationsList = await db
+      .select()
+      .from(applications)
+      .where(eq(applications.postingId, postingId))
+      .execute();
+
+    if (applicationsList.length === 0) {
+      return res.status(404).json({ message: "No applications found" });
+    }
+
+    res.status(200).json(applicationsList);
+  } catch (error) {
+    console.error("Error fetching applications:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const createApplication = async (req, res) => {
   const { userId, postingId, status, applicationDate } = req.body;
 

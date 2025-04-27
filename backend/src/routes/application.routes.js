@@ -3,6 +3,8 @@ import {
   getAllApplications,
   createApplication,
   getApplicationById,
+  getApplicationsByUserId,
+  getApplicationsByPostingId,
   updateApplicationStatus,
 } from "../controller/applications.controller.js";
 
@@ -17,12 +19,28 @@ applicationRouter.get(
   authorizeRoles("yonetici", "admin"),
   getAllApplications
 );
+
 applicationRouter.post(
   "/",
   authenticateToken,
   authorizeRoles("aday"),
   createApplication
 );
+
+applicationRouter.get(
+  "/user/:userId",
+  authenticateToken,
+  authorizeRoles("aday"),
+  getApplicationsByUserId
+);
+
+applicationRouter.get(
+  "/posting/:postingId",
+  authenticateToken,
+  authorizeRoles("yonetici", "admin"),
+  getApplicationsByPostingId
+);
+
 applicationRouter.get("/:id", authenticateToken, getApplicationById);
 applicationRouter.put(
   "/:id/status",
