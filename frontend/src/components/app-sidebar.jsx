@@ -15,6 +15,7 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconFile,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/components/nav-documents";
@@ -33,119 +34,72 @@ import {
 import { useAuthStore } from "../store/auth-store.jsx";
 
 const data = {
-  navMain: [
+  navAdmin: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
+      title: "İlanlar",
+      url: "/dashboard/postings",
+      icon: IconFile,
+    },
+  ],
+  navUser: [
     {
       title: "Dashboard",
       url: "#",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "İlanlar",
+      url: "/dashboard/postings",
+      icon: IconFile,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
+      title: "Başvurularım",
+      url: "/dashboard/applications",
       icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
+      title: "İlanlar",
+      url: "/dashboard/announcements",
+      icon: IconFile,
     },
   ],
-  navSecondary: [
+  navJury: [
     {
-      title: "Settings",
+      title: "Dashboard",
       url: "#",
-      icon: IconSettings,
+      icon: IconDashboard,
     },
     {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
+      title: "Başvurularım",
+      url: "/dashboard/applications",
+      icon: IconFileDescription,
     },
     {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
+      title: "İlanlar",
+      url: "/dashboard/announcements",
+      icon: IconFile,
     },
   ],
 };
 
 export function AppSidebar({ ...props }) {
   const { user } = useAuthStore();
+  const role = user?.role;
+
+  const navItemsByRole = {
+    admin: data.navAdmin,
+    user: data.navUser,
+    jury: data.navJury,
+  };
+
+  const navItems = navItemsByRole[role] || [];
+  console.log("navItems", navItems);
+
   return (
     <Sidebar collapsible="offcanvas" {...props} className="">
       <SidebarHeader className="border-b bg-gray-50">
@@ -165,7 +119,7 @@ export function AppSidebar({ ...props }) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="bg-gray-50">
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
       </SidebarContent>
       <SidebarFooter className="bg-gray-50">
         <NavUser user={user} />

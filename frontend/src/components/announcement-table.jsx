@@ -8,14 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { ilanlar } from "../data/annoucments";
 const AnnouncementTable = () => {
   return (
     <>
-      <Table>
-        <TableCaption>Akademik Başvuru Listesi ...</TableCaption>
+      <Table className="w-full bg-white shadow-md rounded-lg">
+        <TableCaption>kullanıcılar</TableCaption>
         <TableHeader>
-          <TableRow className="bg-blue-100 text-green-800 p-4 rounded shadow">
+          <TableRow className="bg-green-300 text-green-800 p-4 rounded shadow">
+            <TableHead className="w-[100px]">İlan Adı</TableHead>
+            <TableHead>Birim</TableHead>
+            <TableHead>Durum</TableHead>
+            <TableHead>Tarih</TableHead>
             <TableHead className="w-[100px]">İlan Adı</TableHead>
             <TableHead>Birim</TableHead>
             <TableHead>Durum</TableHead>
@@ -23,17 +26,38 @@ const AnnouncementTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {ilanlar.map((ilan) => {
-            if (ilan.status === false) return null;
-            return (
-              <TableRow className="hover:bg-gray-50 transition" key={ilan.id}>
-                <TableCell>{ilan.ilanAdi}</TableCell>
-                <TableCell>{ilan.birim}</TableCell>
-                <TableCell>{ilan.durum}</TableCell>
-                <TableCell>{ilan.basvuruTarihi}</TableCell>
-              </TableRow>
-            );
-          })}
+          <TableRow>
+            <TableCell>ankara</TableCell>
+            <TableCell>istanbul</TableCell>
+            <TableCell>kocaeli</TableCell>
+            <TableCell>
+              <button type="button">adana</button>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>ankara</TableCell>
+            <TableCell>istanbul</TableCell>
+            <TableCell>kocaeli</TableCell>
+            <TableCell>
+              <button type="button">adana</button>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>ankara</TableCell>
+            <TableCell>istanbul</TableCell>
+            <TableCell>kocaeli</TableCell>
+            <TableCell>
+              <button type="button">adana</button>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>ankara</TableCell>
+            <TableCell>istanbul</TableCell>
+            <TableCell>kocaeli</TableCell>
+            <TableCell>
+              <button type="button">adana</button>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </>

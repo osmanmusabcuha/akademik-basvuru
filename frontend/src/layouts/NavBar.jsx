@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useAuthStore } from "../store/auth-store";
 
 const Navbar = () => {
+  const { logout } = useAuth();
+  const { isAuthenticated } = useAuthStore();
+
   return (
     <nav className=" py-4 px-2 border-b bg-[#f7f6f2] border-gray-300 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
@@ -10,18 +15,37 @@ const Navbar = () => {
 
         <div className="flex space-x-4 items-center">
           <>
-            <Link
-              to="/login"
-              className="px-4 border border-[#f7f6f2] hover:text-green-500"
-            >
-              Giriş Yap
-            </Link>
-            <Link
-              to="/register"
-              className="px-4 border border-green-500 bg-green-500 py-2 text-white hover:bg-green-600 hover:border-green-600 rounded"
-            >
-              Kayıt Ol
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="px-4 border border-[#f7f6f2] hover:text-green-500"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={logout}
+                  className="px-4 border border-red-500 bg-red-500 py-2 text-white hover:bg-red-600 hover:border-red-600 rounded"
+                >
+                  Çıkış Yap
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-4 border border-[#f7f6f2] hover:text-green-500"
+                >
+                  Giriş Yap
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-4 border border-green-500 bg-green-500 py-2 text-white hover:bg-green-600 hover:border-green-600 rounded"
+                >
+                  Kayıt Ol
+                </Link>
+              </>
+            )}
           </>
         </div>
       </div>

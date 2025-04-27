@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuthStore } from "@/store/auth-store";
 
 const AnnouncementCard = ({
   id,
@@ -18,8 +19,11 @@ const AnnouncementCard = ({
   requirements = [],
   onClick,
 }) => {
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === "admin" || user?.role === "yonetici";
+
   return (
-    <Card className="border border-gray-200 bg-[#f7f6f2] shadow-lg py-6 px-3 flex flex-col justify-between h-full transition-shadow duration-300 hover:shadow-lg">
+    <Card className="border border-gray-200 bg-white shadow-lg py-6 px-3 flex flex-col justify-between h-full transition-shadow duration-300 hover:shadow-lg">
       <CardHeader>
         <CardTitle className="text-2xl sm:text-3xl ">{title}</CardTitle>
       </CardHeader>
@@ -48,7 +52,7 @@ const AnnouncementCard = ({
             <ul className="list-disc list-inside">
               {requirements.map((req, index) => (
                 <li key={index}>
-                  {req?.requiredCount} {req?.requirement}{" "}
+                  Sayısı: {req?.requiredCount} İstenilen: {req?.requirement}{" "}
                 </li>
               ))}
             </ul>
@@ -60,11 +64,11 @@ const AnnouncementCard = ({
       </CardContent>
       <CardFooter>
         <button
-          disabled={requirements.length === 0}
+          disabled={isAdmin ? requirements.length : false}
           onClick={() => onClick(id)}
           className="w-full disabled:bg-gray-200 bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition"
         >
-          Başvur
+          {isAdmin ? "Gereksinim Ekle" : "Başvur"}
         </button>
       </CardFooter>
     </Card>
