@@ -83,16 +83,17 @@ const ManageRoles = () => {
           <>
             <div class="bg-white max-w-sm ">
               <p class="text-md font-semibold text-gray-800">
-                ID: <span class="text-gray-600">{selectedUser.id}</span>
+                ID: <span class="text-gray-600">{selectedUser?.id}</span>
               </p>
               <p class="text-md font-semibold text-gray-800">
-                İsim: <span class="text-gray-600">{selectedUser.name}</span>
+                İsim: <span class="text-gray-600">{selectedUser?.name}</span>
               </p>
               <p class="text-md font-semibold text-gray-800">
-                E-posta: <span class="text-gray-600">{selectedUser.email}</span>
+                E-posta:{" "}
+                <span class="text-gray-600">{selectedUser?.email}</span>
               </p>
               <p class="text-md font-semibold text-gray-800">
-                Role: <span class="text-gray-600">{selectedUser.role}</span>
+                Role: <span class="text-gray-600">{selectedUser?.role}</span>
               </p>
             </div>
             <hr />

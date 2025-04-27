@@ -47,7 +47,7 @@ const data = {
       icon: IconUserShield,
     },
     {
-      title: "İlanlar",
+      title: "İlanl Düzenle",
       url: "/dashboard/manage-postings",
       icon: IconFile,
     },
@@ -55,13 +55,8 @@ const data = {
   navUser: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: IconDashboard,
-    },
-    {
-      title: "İlanlar",
-      url: "/dashboard/postings",
-      icon: IconFile,
     },
     {
       title: "Başvurularım",
@@ -70,7 +65,7 @@ const data = {
     },
     {
       title: "İlanlar",
-      url: "/dashboard/announcements",
+      url: "/dashboard/postings",
       icon: IconFile,
     },
   ],
@@ -99,7 +94,7 @@ export function AppSidebar({ ...props }) {
 
   const navItemsByRole = {
     admin: data.navAdmin,
-    user: data.navUser,
+    aday: data.navUser,
     jury: data.navJury,
   };
 

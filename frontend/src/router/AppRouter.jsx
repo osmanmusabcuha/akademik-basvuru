@@ -7,6 +7,7 @@ import NotFoundPage from "../pages/NodFound.jsx";
 import UnauthorizedPage from "../pages/Unauthorized.jsx";
 import ManageRoles from "../pages/admin/ManageRoles.jsx";
 import ManagePosting from "../pages/ManagePosting.jsx";
+import Posting from "../pages/applicant/Posting.jsx";
 
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -45,6 +46,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute allowRoles={["yonetici", "admin"]}>
               <ManagePosting />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="postings"
+          element={
+            <ProtectedRoute allowRoles={["aday"]}>
+              <Posting />
             </ProtectedRoute>
           }
         />

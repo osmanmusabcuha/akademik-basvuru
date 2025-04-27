@@ -12,7 +12,13 @@ const ProtectedRoute = ({ children, allowRoles }) => {
     }
   }, [user, allowRoles, navigate]);
 
-  return children;
+  return user && allowRoles.includes(user.role) ? (
+    <>{children}</>
+  ) : (
+    <div className="flex items-center justify-center h-screen">
+      <h1 className="text-2xl font-bold">Loading...</h1>
+    </div>
+  );
 };
 
 export default ProtectedRoute;
