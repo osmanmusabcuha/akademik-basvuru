@@ -10,6 +10,7 @@ const routeMapping = {
   "manage-roles": "Rol Yönetimi",
   postings: "İlanlar",
   "application-documents": "Başvuru Belgeleri",
+  "all-applications": "Tüm Başvurular",
 };
 
 const formatPath = (path) => {

@@ -47,9 +47,14 @@ const data = {
       icon: IconUserShield,
     },
     {
-      title: "İlanl Düzenle",
+      title: "İlanı Düzenle",
       url: "/dashboard/manage-postings",
       icon: IconFile,
+    },
+    {
+      title: "Başvurular",
+      url: "/dashboard/all-applications",
+      icon: IconFileDescription,
     },
   ],
   navUser: [

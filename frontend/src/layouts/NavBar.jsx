@@ -7,7 +7,7 @@ const Navbar = () => {
   const { isAuthenticated } = useAuthStore();
 
   return (
-    <nav className=" py-4 px-2 border-b bg-[#f7f6f2] border-gray-300 shadow-sm">
+    <nav className=" py-4 px-2 border-b bg-gray-200 border-gray-300 shadow-sm">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold flex items-center space-x-1">
           <span className="ml-2">Akademik Başvuru Sistemi</span>
@@ -19,7 +19,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/dashboard"
-                  className="px-4 border border-[#f7f6f2] hover:text-green-500"
+                  className="px-4 border border-gray-200 hover:text-green-500"
                 >
                   Dashboard
                 </Link>
@@ -32,10 +32,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  className="px-4 border border-[#f7f6f2] hover:text-green-500"
-                >
+                <Link to="/login" className="px-4 border hover:text-green-500">
                   Giriş Yap
                 </Link>
                 <Link
