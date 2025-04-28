@@ -9,6 +9,7 @@ import ManageRoles from "../pages/admin/ManageRoles.jsx";
 import ManagePosting from "../pages/admin/ManagePosting.jsx";
 import Posting from "../pages/applicant/Posting.jsx";
 import Application from "../pages/applicant/Application.jsx";
+import ApplicationDocuments from "../pages/applicant/ApplicationDocuments.jsx";
 
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -63,6 +64,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute allowRoles={["aday"]}>
               <Application />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="applications/:id/application-documents"
+          element={
+            <ProtectedRoute allowRoles={["aday"]}>
+              <ApplicationDocuments />
             </ProtectedRoute>
           }
         />

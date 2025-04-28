@@ -5,10 +5,11 @@ import { useLocation } from "react-router-dom";
 
 const routeMapping = {
   dashboard: "Dashboard",
-  applications: "Başvurular",
+  applications: "Başvurularım",
   "manage-postings": "İlan Yönetimi",
   "manage-roles": "Rol Yönetimi",
   postings: "İlanlar",
+  "application-documents": "Başvuru Belgeleri",
 };
 
 const formatPath = (path) => {

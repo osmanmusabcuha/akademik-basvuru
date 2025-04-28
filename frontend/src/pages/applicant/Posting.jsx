@@ -53,7 +53,7 @@ const Posting = () => {
   return (
     <>
       <div>
-        <section className="flex flex-col relative text-white text-left mb-4 shadow-md mx-6 h-60 bg-center bg-cover bg-[url('/kou-banner.webp')] rounded-2xl">
+        <section className="flex flex-col relative px-6 text-white text-left mb-4 shadow-md h-60 bg-center bg-cover bg-[url('/kou-banner.webp')] rounded-2xl">
           <div className="mt-auto">
             <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-40 mix-blend-multiply"></div>
             <h1 className="text-4xl text-white relative z-10 md:text-5xl lg:text-6xl w-fit p-2 rounded font-bold mb-2">
@@ -61,7 +61,7 @@ const Posting = () => {
             </h1>
           </div>
         </section>
-        <section className="container mx-auto px-6 py-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <section className="container mx-auto py-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
           {loading && <p>Loading...</p>}
           {error && <p>{error}</p>}
           {data &&
