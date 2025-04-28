@@ -35,7 +35,7 @@ const Application = () => {
         </div>
       </section>
       {applicationsData && applicationsData.length > 0 ? (
-        <div className="container max-w-full flex flex-col gag-2 justify-center">
+        <div className="container max-w-full flex flex-col gap-4 justify-center">
           {applicationsData.map((application) => (
             <div
               key={application.id}
