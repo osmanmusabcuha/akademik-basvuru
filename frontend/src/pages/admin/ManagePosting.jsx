@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-import AnnouncementCard from "../components/announcement-card.jsx";
+import AnnouncementCard from "../../components/announcement-card.jsx";
 import { Card } from "@/components/ui/card";
 import { IconFilePlus } from "@tabler/icons-react";
-import AnnouncementDialog from "../components/manage-dialog.jsx";
-import { useFetch } from "../hooks/use-fetch.js";
+import AnnouncementDialog from "../../components/manage-dialog.jsx";
+import { useFetch } from "../../hooks/use-fetch.js";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 
-import { useAuthStore } from "../store/auth-store.jsx";
-import SelectComp from "../components/select.jsx";
+import { useAuthStore } from "../../store/auth-store.jsx";
+import SelectComp from "../../components/select.jsx";
 
 const category = ["Docent", "Dr.Ogr.Uyesi", "Profesor"];
 
