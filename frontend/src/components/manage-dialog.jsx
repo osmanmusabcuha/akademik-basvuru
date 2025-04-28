@@ -4,7 +4,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 const ManageDialog = ({ open, onOpenChange, children, title }) => {
@@ -19,4 +18,5 @@ const ManageDialog = ({ open, onOpenChange, children, title }) => {
     </Dialog>
   );
 };
+
 export default ManageDialog;

@@ -61,7 +61,7 @@ const Posting = () => {
             </h1>
           </div>
         </section>
-        <section className="container mx-auto py-2 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <section className="container mx-auto py-2 grid grid-cols-1 lg:grid-cols-2 gap-4 space-y-1">
           {loading && <p>Loading...</p>}
           {error && <p>{error}</p>}
           {data &&
