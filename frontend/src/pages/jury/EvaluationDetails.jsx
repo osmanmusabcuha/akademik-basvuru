@@ -58,8 +58,13 @@ const EvaluationDetails = () => {
     "GET",
     token
   );
+
+  const filteredEvaluationData = evaluationData?.filter(
+    (eva) => eva?.juryId === user?.id
+  );
+
   console.log("Evaluation Loading: ", evaLoading);
-  console.log("Evaluation Data: ", evaluationData);
+  console.log("Evaluation Data: ", filteredEvaluationData);
 
   const handleButtonDialog = () => {
     setOpen(!open);
@@ -145,7 +150,7 @@ const EvaluationDetails = () => {
               <h1 className="text-2xl font-bold">Loading...</h1>
             </div>
           )}
-          {evaluationData?.length > 0 ? (
+          {filteredEvaluationData?.length > 0 ? (
             <>
               <Card className=" border-gray-200 bg-white shadow-lg py-6 px-3 flex flex-col justify-between h-full transition-shadow duration-300 hover:shadow-lg">
                 <div className="flex flex-col items-center justify-center h-full">
