@@ -35,14 +35,14 @@ const ApplicationDetails = () => {
     token
   );
 
-  const { data: juryPostingData, loading: juryPostingLoading } = useFetch(
-    `http://localhost:3000/api/juries/posting/${data?.postingId}`,
-    "GET",
-    token
-  );
+  const { data: juryApplicationData, loading: juryApplicationLoading } =
+    useFetch(
+      `http://localhost:3000/api/juries/application/${data?.applicationId}`,
+      "GET",
+      token
+    );
 
-  console.log("Jury Posting Data: ", juryPostingData);
-  console.log("Jury Posting Loading: ", juryPostingLoading);
+  console.log("Jury Application Data: ", juryApplicationData);
 
   const userRoleJuries = usersData?.filter((user) => {
     return user.role === "juri";
@@ -72,7 +72,7 @@ const ApplicationDetails = () => {
 
   useEffect(() => {
     const updateApplicationStatus = async () => {
-      if (juryPostingData?.length > 0) {
+      if (juryApplicationData?.length > 0) {
         try {
           const response = await fetch(
             `http://localhost:3000/api/applications/${data?.applicationId}/status`,
@@ -98,7 +98,7 @@ const ApplicationDetails = () => {
     };
 
     updateApplicationStatus();
-  }, [juryPostingData, data?.applicationId, token]);
+  }, [juryApplicationData, data?.applicationId, token]);
 
   const handleSubmit = async () => {
     selectedJury.forEach(async (jury) => {
@@ -110,7 +110,7 @@ const ApplicationDetails = () => {
         },
         body: JSON.stringify({
           userId: jury.userId,
-          postingId: data?.postingId,
+          applicationId: data?.applicationId,
         }),
       });
       if (!response.ok) {
@@ -141,7 +141,12 @@ const ApplicationDetails = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {userData && <UserCard user={userData} />}
         {requirements && <PostingCard requirements={requirements} />}
-        {juryPostingLoading && (
+        {juryApplicationLoading && (
+          <div className="flex items-center justify-center">
+            <p className="text-gray-600">Kontrol Ediliyor...</p>
+          </div>
+        )}
+        {juryApplicationLoading && (
           <div className="flex items-center justify-center">
             <p className="text-gray-600">Kontrol Ediliyor...</p>
           </div>
@@ -149,8 +154,8 @@ const ApplicationDetails = () => {
         <StatusCard
           onClick={handleClick}
           status={data?.status.replace("-", " ")}
-          isAdded={juryPostingData?.length > 0}
-          juryPostingData={juryPostingData}
+          isAdded={juryApplicationData?.length > 0}
+          juryApplicationData={juryApplicationData}
         />
       </div>
       <div>
@@ -245,16 +250,17 @@ const PostingCard = ({ requirements }) => {
   );
 };
 
-const StatusCard = ({ status, onClick, isAdded, juryPostingData }) => {
+const StatusCard = ({ status, onClick, isAdded, juryApplicationData }) => {
   console.log(isAdded);
+  console.log("Status Card: ", juryApplicationData);
   return (
     <div className="max-w-full lg:col-span-1 p-6 bg-white border border-gray-200 rounded-lg shadow-md">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Başvuru Durumu</h2>
       <p className="text-gray-600 mb-2"> {status}</p>
       {isAdded ? (
         <div className="max-w-full text-white bg-green-400 rounded-lg">
-          {juryPostingData?.length > 0 &&
-            juryPostingData.map((jury) => {
+          {juryApplicationData?.length > 0 &&
+            juryApplicationData.map((jury) => {
               return (
                 <div className="flex gap-2 justify-evenly">
                   <p

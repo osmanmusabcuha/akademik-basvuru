@@ -13,6 +13,7 @@ import ApplicationDocuments from "../pages/applicant/ApplicationDocuments.jsx";
 import AllApplications from "../pages/admin/AllApplications.jsx";
 import ApplicationDetails from "../pages/admin/ApplicationDetails.jsx";
 import Evaluations from "../pages/jury/Evaluations.jsx";
+import EvaluationDetails from "../pages/jury/EvaluationDetails.jsx";
 
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -99,6 +100,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute allowRoles={["juri"]}>
               <Evaluations />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="evaluations/:id"
+          element={
+            <ProtectedRoute allowRoles={["juri"]}>
+              <EvaluationDetails />
             </ProtectedRoute>
           }
         />
