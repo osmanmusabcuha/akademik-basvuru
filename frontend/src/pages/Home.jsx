@@ -1,7 +1,12 @@
 import AnnouncementCard from "../components/announcement-card";
 import { useFetch } from "../hooks/use-fetch";
+import { useAuthStore } from "../store/auth-store";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
+
   const { data, error, loading } = useFetch(
     "http://localhost:3000/api/postings",
     "GET"
@@ -9,7 +14,13 @@ const Home = () => {
 
   const handleButtonClick = (id) => {
     console.log("Button clicked for item:", id);
-    // Perform any action you want when the button is clicked
+    if (!user) {
+      navigate("/login");
+    }
+    user.role == "aday" && navigate("/dashboard/postings");
+    user.role == "juri" && navigate("/dashboard");
+    user.role == "admin" && navigate("/dashboard/all-postings");
+    user.role == "yonetici" && navigate("/dashboard/all-postings");
   };
 
   return (
