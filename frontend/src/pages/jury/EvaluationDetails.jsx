@@ -41,11 +41,30 @@ const EvaluationDetails = () => {
     token
   );
 
-  const { data: questionData } = useFetch(
-    `http://localhost:3000/api/questions/application/${data?.applicationId}`,
+  const { data: questionData, loading: questionLoading } = useFetch(
+    `http://localhost:3000/api/questions`,
     "GET",
     token
   );
+
+  console.log(questionData);
+
+  const {
+    data: evaluationData,
+    fetchData: fetchEvaData,
+    loading: evaLoading,
+  } = useFetch(
+    `http://localhost:3000/api/evaluations/application/${data?.applicationId}`,
+    "GET",
+    token
+  );
+
+  const filteredEvaluationData = evaluationData?.filter(
+    (eva) => eva?.juryId === user?.id
+  );
+
+  console.log("Evaluation Loading: ", evaLoading);
+  console.log("Evaluation Data: ", filteredEvaluationData);
 
   const handleButtonDialog = () => {
     setOpen(!open);
@@ -63,10 +82,10 @@ const EvaluationDetails = () => {
       <Document>
         <Page size="A4" style={styles.page}>
           <View style={styles.section}>
-            <Text>Application ID: {data?.applicationId}</Text>
+            <Text>Basvuru ID: {data?.applicationId}</Text>
             <Text>Jury ID: {user?.id}</Text>
-            <Text>Comment: {comment}</Text>
-            <Text>Decision: {decision}</Text>
+            <Text>Yorum: {comment}</Text>
+            <Text>Karar: {decision}</Text>
           </View>
         </Page>
       </Document>
@@ -85,38 +104,65 @@ const EvaluationDetails = () => {
       formData.append("file", blob, "evaluation.pdf");
 
       // Backend'e POST isteği gönder
-      const response = await axios.post(
-        "http://localhost:3000/api/evaluations",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      await axios.post("http://localhost:3000/api/evaluations", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      if (response.ok) {
-        alert("Evaluation başarıyla oluşturuldu!");
-      } else {
-        const errorData = await response.json();
-        alert(`Hata: ${errorData.message}`);
-      }
+      alert("Evaluation başarıyla oluşturuldu!");
+      setOpen(false);
+      setComment("");
+      setDecision("");
+      fetchEvaData();
     } catch (error) {
-      console.error("Evaluation oluşturulurken hata:", error);
-      alert("Evaluation oluşturulurken bir hata oluştu.");
+      alert(`Hata: ${error.message}`);
+      console.error("Error creating evaluation:", error);
+      setOpen(false);
+      setComment("");
+      setDecision("");
     }
   };
 
   console.log("Document Data: ", documentData);
   console.log("Answers Data: ", answersData);
 
+  const answersResult = answersData?.map((answer) => {
+    const question = questionData?.questions.find(
+      (q) => q.id === answer?.questionId
+    );
+    return {
+      ...answer,
+      question: question ? question.question : "Soru bulunamadı",
+    };
+  });
+  console.log("answersData: ", answersData);
+
+  console.log("Answers Result: ", answersResult);
   return (
     <>
-      <div className="p-6 min-h-screen container mx-auto">
+      <div className="p-6 min-h-screen container">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Degerlendirme</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <EvaluationCard handleButtonDialog={handleButtonDialog} />
+          {evaLoading && (
+            <div className="flex items-center justify-center h-screen">
+              <h1 className="text-2xl font-bold">Loading...</h1>
+            </div>
+          )}
+          {filteredEvaluationData?.length > 0 ? (
+            <>
+              <Card className=" border-gray-200 bg-white shadow-lg py-6 px-3 flex flex-col justify-between h-full transition-shadow duration-300 hover:shadow-lg">
+                <div className="flex flex-col items-center justify-center h-full">
+                  <h2 className="text-4xl font-bold text-gray-600 mb-4">
+                    Olusturuldu
+                  </h2>
+                </div>
+              </Card>
+            </>
+          ) : (
+            <EvaluationCard handleButtonDialog={handleButtonDialog} />
+          )}
         </div>
         <h1 className="text-3xl font-bold text-gray-800 mb-6">
           Tablo 1 Dökümanları
@@ -137,9 +183,14 @@ const EvaluationDetails = () => {
         <h1 className="text-3xl font-bold text-gray-800 mt-12 mb-6">
           Tablo 3 Dökümanları
         </h1>
+        {questionLoading && (
+          <div className="flex items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold">Loading...</h1>
+          </div>
+        )}
         {answersData?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {answersData.map((answer) => (
+            {answersResult.map((answer) => (
               <AnswerCard key={answer.id} answer={answer} />
             ))}
           </div>
@@ -224,6 +275,9 @@ const AnswerCard = ({ answer }) => {
       <h3 className="text-md font-bold text-gray-700 mb-2">
         Soru ID: {answer.questionId}
       </h3>
+      <p className="text-gray-700 mb-2">
+        <strong>Soru:</strong> {answer.question || "Boş"}
+      </p>
       <p className="text-gray-700 mb-2">
         <strong>Cevap:</strong> {answer.answer || "Boş"}
       </p>

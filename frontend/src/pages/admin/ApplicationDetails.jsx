@@ -44,6 +44,22 @@ const ApplicationDetails = () => {
 
   console.log("Jury Application Data: ", juryApplicationData);
 
+  const { data: evaluationData } = useFetch(
+    `http://localhost:3000/api/evaluations/application/${data?.applicationId}`,
+    "GET",
+    token
+  );
+
+  console.log("Evaluation Data: ", evaluationData);
+
+  const isAllCompleted = juryApplicationData?.every((jury) => {
+    const isCompleted = evaluationData?.some(
+      (evaluation) => evaluation.juryId === jury.userId
+    );
+    return isCompleted;
+  });
+  console.log("Is All Completed: ", isAllCompleted);
+
   const userRoleJuries = usersData?.filter((user) => {
     return user.role === "juri";
   });
@@ -138,7 +154,7 @@ const ApplicationDetails = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 @min-6xl:grid-cols-4 gap-6">
         {userData && <UserCard user={userData} />}
         {requirements && <PostingCard requirements={requirements} />}
         {juryApplicationLoading && (
@@ -153,9 +169,19 @@ const ApplicationDetails = () => {
         )}
         <StatusCard
           onClick={handleClick}
+          handleEva={() => {
+            navigate(
+              `/dashboard/all-applications/${data?.applicationId}/evaluation`,
+              {
+                state: { applicationId: data?.applicationId },
+              }
+            );
+          }}
           status={data?.status.replace("-", " ")}
           isAdded={juryApplicationData?.length > 0}
           juryApplicationData={juryApplicationData}
+          evaluationData={evaluationData}
+          isAllCompleted={isAllCompleted}
         />
       </div>
       <div>
@@ -250,42 +276,82 @@ const PostingCard = ({ requirements }) => {
   );
 };
 
-const StatusCard = ({ status, onClick, isAdded, juryApplicationData }) => {
+const StatusCard = ({
+  status,
+  onClick,
+  isAdded,
+  juryApplicationData,
+  evaluationData,
+  isAllCompleted,
+  handleEva,
+}) => {
   console.log(isAdded);
   console.log("Status Card: ", juryApplicationData);
   return (
-    <div className="max-w-full lg:col-span-1 p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+    <div className="max-w-full p-6 bg-white border border-gray-200 rounded-lg shadow-md">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Başvuru Durumu</h2>
       <p className="text-gray-600 mb-2"> {status}</p>
       {isAdded ? (
-        <div className="max-w-full text-white bg-green-400 rounded-lg">
+        <div className="max-w-full text-white rounded-lg">
           {juryApplicationData?.length > 0 &&
             juryApplicationData.map((jury) => {
+              console.log("Jury: ", jury);
+              const isCompleted = evaluationData?.some(
+                (evaluation) => evaluation.juryId === jury.userId
+              );
+              console.log("Is Completed: ", isCompleted);
               return (
-                <div className="flex gap-2 justify-evenly">
-                  <p
-                    key={jury.id}
-                    className="text-gray-600 mb-2 bg-green-400 p-2 rounded-lg"
-                  >
-                    <span className="font-medium text-white">ID:</span>{" "}
-                    {jury.userId}
-                  </p>
-                  <p
-                    key={jury.name}
-                    className="text-gray-600 mb-2 bg-green-400 p-2 rounded-lg"
-                  >
-                    <span className="font-medium text-white">Adı:</span>{" "}
-                    {jury.name}
-                  </p>
+                <div className="flex gap-2 border border-green-600 p-4 mb-2 rounded-lg">
+                  <div className="flex">
+                    <p
+                      key={jury.id}
+                      className="text-gray-600 mb-2 p-2 rounded-lg"
+                    >
+                      <span className="font-medium ">ID:</span> {jury.userId}
+                    </p>
+                    <p
+                      key={jury.name}
+                      className="text-gray-600 mb-2 p-2 rounded-lg"
+                    >
+                      <span className="font-medium ">Adı:</span> {jury.name}
+                    </p>
+                  </div>
+                  {isCompleted ? (
+                    <p className="text-green-600 mb-2 p-2 rounded-lg">
+                      <span className="font-medium text-gray-600">Durum:</span>{" "}
+                      Değerlendirildi
+                    </p>
+                  ) : (
+                    <p className="text-gray-600 mb-2 p-2 rounded-lg">
+                      <span className="font-medium text-gray-600">Durum:</span>{" "}
+                      Değerlendiriliyor
+                    </p>
+                  )}
                 </div>
               );
             })}
+          {isAllCompleted && (
+            <>
+              <p className="text-green-600 mb-2 p-2 rounded-lg">
+                <span className="font-medium text-gray-600">Durum:</span> Tüm
+                Değerlendirmeler Tamamlandı
+              </p>
+              <div>
+                <button
+                  onClick={handleEva}
+                  className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg mt-4"
+                >
+                  Degerlendir
+                </button>
+              </div>
+            </>
+          )}
         </div>
       ) : status == "belgeler inceleniyor" ? (
         <div>
           <button
             onClick={onClick}
-            className="bg-green-400 text-white p-2 rounded-lg mt-4"
+            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg mt-4"
           >
             Juri Ekle
           </button>

@@ -192,12 +192,6 @@ const ApplicationDocuments = () => {
         }
       }
 
-      if (selectedQuestions.length === 0) {
-        alert("Lütfen en az bir soru seçin.");
-        fetchAnsData();
-        return;
-      }
-
       for (const question of selectedQuestions) {
         const formDataToSend = new FormData();
         formDataToSend.append("applicationId", data.applicationId);
@@ -214,6 +208,12 @@ const ApplicationDocuments = () => {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
+      }
+      if (selectedQuestions.length === 0) {
+        alert("Lütfen en az bir soru seçin.");
+        fetchAnsData();
+        fetchAppData();
+        return;
       }
       fetchAppData();
       fetchAnsData();
