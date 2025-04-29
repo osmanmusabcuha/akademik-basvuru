@@ -1,13 +1,13 @@
 import db from "../db/index.js";
 import { eq, and } from "drizzle-orm";
-import { posting } from "../db/schema/posting.js";
+import { applications } from "../db/schema/applications.js";
 import { users } from "../db/schema/users.js";
 import { roles } from "../db/schema/roles.js";
 import { userRoles } from "../db/schema/userRoles.js";
 import { juries } from "../db/schema/juries.js";
 
 export const assignJury = async (req, res) => {
-  const { postingId, userId } = req.body;
+  const { applicationId, userId } = req.body;
 
   try {
     const userResult = await db
@@ -28,37 +28,37 @@ export const assignJury = async (req, res) => {
         .json({ message: "User not found or not a jury member" });
     }
     console.log("User found:", userResult[0]);
-    const postingResult = await db
+    const applicationResult = await db
       .select({
-        id: posting.id,
-        title: posting.title,
-        category: posting.category,
+        id: applications.id,
       })
-      .from(posting)
-      .where(eq(posting.id, postingId));
+      .from(applications)
+      .where(eq(applications.id, applicationId));
 
-    if (postingResult.length === 0) {
-      return res.status(404).json({ message: "Posting not found" });
+    if (applicationResult.length === 0) {
+      return res.status(404).json({ message: "Application not found" });
     }
 
     const existingJury = await db
       .select()
       .from(juries)
-      .where(and(eq(juries.postingId, postingId), eq(juries.userId, userId)));
+      .where(
+        and(eq(juries.applicationId, applicationId), eq(juries.userId, userId))
+      );
 
     if (existingJury.length > 0) {
       return res.status(409).json({ message: "Jury already assigned" });
     }
 
     await db.insert(juries).values({
-      postingId,
+      applicationId,
       userId,
     });
 
     res.status(201).json({
       message: "Jury assigned successfully",
       jury: {
-        postingId,
+        applicationId,
         userId,
       },
     });
@@ -70,21 +70,21 @@ export const assignJury = async (req, res) => {
   }
 };
 
-export const getJuriesByPostingId = async (req, res) => {
-  const { postingId } = req.params;
+export const getJuriesByApplicationId = async (req, res) => {
+  const { applicationId } = req.params;
 
   try {
     const juryResult = await db
       .select({
         id: juries.id,
         userId: juries.userId,
-        postingId: juries.postingId,
+        applicationId: juries.applicationId,
         name: users.name,
         email: users.email,
       })
       .from(juries)
       .innerJoin(users, eq(juries.userId, users.id))
-      .where(eq(juries.postingId, postingId));
+      .where(eq(juries.applicationId, applicationId));
 
     if (juryResult.length === 0) {
       return res.status(404).json({ message: "No jury members found" });
@@ -107,12 +107,11 @@ export const getJuriesByUserId = async (req, res) => {
       .select({
         id: juries.id,
         userId: juries.userId,
-        postingId: juries.postingId,
-        title: posting.title,
-        category: posting.category,
+        applicationId: juries.applicationId,
+        status: applications.status,
       })
       .from(juries)
-      .innerJoin(posting, eq(juries.postingId, posting.id))
+      .innerJoin(applications, eq(juries.applicationId, applications.id))
       .where(eq(juries.userId, userId));
 
     if (juryResult.length === 0) {
