@@ -118,23 +118,6 @@ const EvaluationDetails = () => {
       setComment("");
       setDecision("");
     }
-
-    try {
-      await axios.put(
-        `http://localhost:3000/api/applications/${data?.applicationId}/status`,
-        {
-          status: "yonetici-degerlendirme",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Token ekleniyor
-          },
-        }
-      );
-      console.log("Başvuru durumu güncellendi.");
-    } catch (err) {
-      console.error("Başvuru durumu güncellenirken bir hata oluştu:", err);
-    }
   };
 
   console.log("Document Data: ", documentData);
