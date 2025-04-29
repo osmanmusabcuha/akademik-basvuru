@@ -53,12 +53,6 @@ export const createEvaluation = async (req, res) => {
       return res.status(404).json({ message: "Application not found" });
     }
 
-    if (applicationResult[0].postingId !== juryResult[0].postingId) {
-      return res
-        .status(400)
-        .json({ message: "Application does not belong to the jury!" });
-    }
-
     const bucketName = "evaluations";
     const found = await minioClient.bucketExists(bucketName);
 
