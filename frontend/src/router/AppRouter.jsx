@@ -14,6 +14,7 @@ import AllApplications from "../pages/admin/AllApplications.jsx";
 import ApplicationDetails from "../pages/admin/ApplicationDetails.jsx";
 import Evaluations from "../pages/jury/Evaluations.jsx";
 import EvaluationDetails from "../pages/jury/EvaluationDetails.jsx";
+import Evaluation from "../pages/admin/Evaluation.jsx";
 
 import MainLayout from "../layouts/MainLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -92,6 +93,14 @@ const AppRouter = () => {
           element={
             <ProtectedRoute allowRoles={["admin", "yonetici"]}>
               <ApplicationDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="all-applications/:id/evaluation"
+          element={
+            <ProtectedRoute allowRoles={["admin", "yonetici"]}>
+              <Evaluation />
             </ProtectedRoute>
           }
         />
