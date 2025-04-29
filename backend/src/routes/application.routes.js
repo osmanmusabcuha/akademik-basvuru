@@ -16,7 +16,7 @@ const applicationRouter = express.Router();
 applicationRouter.get(
   "/",
   authenticateToken,
-  authorizeRoles("yonetici", "admin"),
+  authorizeRoles("yonetici", "admin", "juri"),
   getAllApplications
 );
 
@@ -37,7 +37,7 @@ applicationRouter.get(
 applicationRouter.get(
   "/posting/:postingId",
   authenticateToken,
-  authorizeRoles("yonetici", "admin"),
+  authorizeRoles("yonetici", "admin", "juri"),
   getApplicationsByPostingId
 );
 
