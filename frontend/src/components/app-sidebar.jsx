@@ -81,14 +81,9 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Başvurularım",
-      url: "/dashboard/applications",
+      title: "Degerlendirmeler",
+      url: "/dashboard/evaluations",
       icon: IconFileDescription,
-    },
-    {
-      title: "İlanlar",
-      url: "/dashboard/announcements",
-      icon: IconFile,
     },
   ],
 };
@@ -100,7 +95,7 @@ export function AppSidebar({ ...props }) {
   const navItemsByRole = {
     admin: data.navAdmin,
     aday: data.navUser,
-    jury: data.navJury,
+    juri: data.navJury,
   };
 
   const navItems = navItemsByRole[role] || [];

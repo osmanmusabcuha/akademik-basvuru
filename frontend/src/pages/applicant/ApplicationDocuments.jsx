@@ -94,7 +94,13 @@ const ApplicationDocuments = () => {
 
       updateApplicationStatus();
     }
-  }, [filteredRequirements, applicationData, answersData, applicationId]);
+  }, [
+    filteredRequirements,
+    applicationData,
+    answersData,
+    applicationId,
+    token,
+  ]);
 
   const handleFileChange = (e, requirement, index) => {
     const file = e.target.files[0];
@@ -186,6 +192,12 @@ const ApplicationDocuments = () => {
         }
       }
 
+      if (selectedQuestions.length === 0) {
+        alert("Lütfen en az bir soru seçin.");
+        fetchAnsData();
+        return;
+      }
+
       for (const question of selectedQuestions) {
         const formDataToSend = new FormData();
         formDataToSend.append("applicationId", data.applicationId);
@@ -203,7 +215,7 @@ const ApplicationDocuments = () => {
           }
         );
       }
-      fetchAppData(); // Başvuru belgelerini güncelle
+      fetchAppData();
       fetchAnsData();
       alert("Sorular başarıyla gönderildi!");
     } catch (err) {
@@ -213,7 +225,7 @@ const ApplicationDocuments = () => {
   };
 
   const limitedQuestionsData = Array.isArray(questionsData?.questions)
-    ? questionsData.questions.slice(0, 10) // İlk 10 elemanı al
+    ? questionsData.questions.slice(0, 228)
     : [];
 
   return (

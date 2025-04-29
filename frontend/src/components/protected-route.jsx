@@ -6,6 +6,9 @@ const ProtectedRoute = ({ children, allowRoles }) => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
 
+  console.log("User in ProtectedRoute: ", user.role);
+  console.log("Allowed Roles: ", allowRoles);
+
   useEffect(() => {
     if (!user || !allowRoles.includes(user.role)) {
       navigate("/unauthorized");
