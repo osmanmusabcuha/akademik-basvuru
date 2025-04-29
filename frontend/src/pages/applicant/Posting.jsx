@@ -13,11 +13,20 @@ const Posting = () => {
     "http://localhost:3000/api/postings",
     "GET"
   );
-  const { data: applicationsData, fetchData: fetchApplicationData } = useFetch(
+  const {
+    data: applicationsData,
+    loading: applicationLoading,
+    fetchData: fetchApplicationData,
+    error: applicationError,
+  } = useFetch(
     "http://localhost:3000/api/applications/user/" + user.id,
     "GET",
     token
   );
+
+  if (applicationError) {
+    console.error("Error fetching applications:", applicationError);
+  }
 
   const handleButtonClick = (id) => {
     setPostingId(id);
@@ -50,6 +59,8 @@ const Posting = () => {
     }
   };
 
+  console.log("Data:", data);
+
   return (
     <>
       <div>
@@ -63,12 +74,18 @@ const Posting = () => {
         </section>
         <section className="container mx-auto py-2 grid grid-cols-1 lg:grid-cols-2 gap-4 space-y-1">
           {loading && <p>Loading...</p>}
+          {applicationLoading && <p>Loading...</p>}
           {error && <p>{error}</p>}
           {data &&
             data
-              .filter((item) =>
-                applicationsData?.some((app) => app?.postingId !== item?.id)
-              )
+              .filter((item) => {
+                if (!applicationsData || applicationsData.length === 0) {
+                  return true; // Başvuru datası yoksa hepsini göster
+                }
+                return !applicationsData.some(
+                  (app) => app?.postingId === item?.id
+                );
+              })
               .map(
                 (item, index) =>
                   item.requirements.length > 0 && ( // Eğer requirements boş değilse
