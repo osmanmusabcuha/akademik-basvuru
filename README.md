@@ -18,6 +18,12 @@ Node.js tabanlı RESTful API. Kurulum ve çalıştırma adımları için:
 
 👉 [Backend README](./backend/README.md)
 
+## 🖼️ Uygulama Paneli
+
+Aşağıda uygulama paneline ait örnek bir ekran görüntüsü yer almaktadır:
+
+![Panel Görseli](./assets/panel.png)
+
 ## 🌐 Sayfa Yapısı
 
 ### Genel Sayfalar
