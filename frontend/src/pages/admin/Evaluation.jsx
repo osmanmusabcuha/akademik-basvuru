@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "../../store/auth-store";
 import { useLocation } from "react-router-dom";
 import { useFetch } from "../../hooks/use-fetch";
+import ManageDialog from "../../components/manage-dialog";
 
 const Evaluation = () => {
   const { token } = useAuthStore();
+  const [open, setOpen] = useState(false);
+  const [documentScore, setDocumentScore] = useState(0);
+  const [stateDocumentId, setStateDocumentId] = useState(null);
   const location = useLocation();
   const { applicationId } = location?.state || {};
   const { data: evaluationsData, loading: evaluationsLoading } = useFetch(
@@ -13,13 +17,27 @@ const Evaluation = () => {
     token
   );
 
-  const { data: applicationDocument, loading: documentLoading } = useFetch(
+  const {
+    data: applicationDocument,
+    loading: documentLoading,
+    fetchData: fetchApplicationData,
+  } = useFetch(
     `http://localhost:3000/api/documents/application/${applicationId}`,
     "GET",
     token
   );
-  console.log("Application Document: ", applicationDocument);
-  console.log("Evaluations Data: ", evaluationsData);
+
+  const handleDocument = async (documentId) => {
+    console.log("Document ID: ", documentId);
+    setStateDocumentId(documentId);
+    setOpen(true);
+    fetchApplicationData();
+  };
+
+  const handleSubmitDocumentScore = async (documentScore) => {
+    console.log("documentScore: ", documentScore);
+    console.log("stateDocumentId: ", stateDocumentId);
+  };
 
   return (
     <>
@@ -52,7 +70,11 @@ const Evaluation = () => {
         {applicationDocument && applicationDocument.length > 0 ? (
           <div className="container max-w-full grid @min-6xl:grid-cols-2 grid-cols-1 gap-4">
             {applicationDocument.map((document) => (
-              <DocumentCard key={document.id} document={document} />
+              <DocumentCard
+                key={document.id}
+                handleDocument={handleDocument}
+                document={document}
+              />
             ))}
           </div>
         ) : (
@@ -61,6 +83,30 @@ const Evaluation = () => {
           </div>
         )}
       </div>
+      <ManageDialog open={open} onOpenChange={setOpen} title="Puanlama">
+        <div className="flex flex-col gap-4">
+          <label className="text-lg font-bold text-gray-700">
+            Puan:
+            <input
+              type="number"
+              className="mt-2 p-2 border rounded-md w-full"
+              placeholder="Puanı girin"
+              onChange={(e) => {
+                setDocumentScore(e.target.value);
+              }}
+            />
+          </label>
+          <button
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+            onClick={() => {
+              handleSubmitDocumentScore(documentScore);
+              setOpen(false);
+            }}
+          >
+            Kaydet
+          </button>
+        </div>
+      </ManageDialog>
     </>
   );
 };
@@ -91,8 +137,7 @@ const EvaluationCard = ({ evaluation }) => {
   );
 };
 
-const DocumentCard = ({ document }) => {
-  console.log("Document: ", document);
+const DocumentCard = ({ document, handleDocument }) => {
   return (
     <div className="bg-white shadow-md rounded-xl p-4 border">
       <h2 className="text-lg font-bold text-green-600 mb-2">
@@ -114,6 +159,18 @@ const DocumentCard = ({ document }) => {
       >
         İndir
       </a>
+      {document.score == 0 ? (
+        <button
+          onClick={() => handleDocument(document.id)}
+          className="mt-4 ml-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+        >
+          Puanla
+        </button>
+      ) : (
+        <p className="mt-4 ml-2 text-green-600 font-bold">
+          Puan: {document.score}
+        </p>
+      )}
     </div>
   );
 };
