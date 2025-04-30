@@ -1,0 +1,1 @@
+ALTER TABLE "application_answers" ADD COLUMN "score" integer NOT NULL;

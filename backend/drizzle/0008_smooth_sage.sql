@@ -1,0 +1,1 @@
+ALTER TABLE "evaluations" ADD COLUMN "comment" text NOT NULL;

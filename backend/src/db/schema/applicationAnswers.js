@@ -11,8 +11,9 @@ export const applicationAnswers = pgTable("application_answers", {
   questionId: integer("question_id")
     .references(() => applicationQuestions.id)
     .notNull(),
-  answer: varchar("answer", { length: 255 }).notNull(),
-  filePath: varchar("file_path", { length: 255 }).notNull(),
+  answer: varchar("answer", { length: 255 }),
+  score: integer("score"),
+  filePath: varchar("file_path", { length: 255 }),
 });
 
 export const applicationAnswersRelations = relations(
