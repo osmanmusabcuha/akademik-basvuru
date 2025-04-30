@@ -10,6 +10,7 @@ export const applicationDocuments = pgTable("application_documents", {
   authorRole: varchar("author_role", { length: 255 }).notNull(),
   documentType: varchar("document_type", { length: 255 }).notNull(),
   documentUrl: varchar("document_url", { length: 255 }).notNull(),
+  score: integer("score").default(0),
 });
 
 export const applicationDocumentsRelations = relations(

@@ -6,6 +6,7 @@ import {
   getApplicationsByUserId,
   getApplicationsByPostingId,
   updateApplicationStatus,
+  putApplicationScore,
 } from "../controller/applications.controller.js";
 
 import { authenticateToken } from "../middleware/auth.middleware.js";
@@ -46,6 +47,12 @@ applicationRouter.put(
   "/:id/status",
   authenticateToken,
   updateApplicationStatus
+);
+applicationRouter.put(
+  "/:id/score",
+  authenticateToken,
+  authorizeRoles("yonetici", "admin", "juri"),
+  putApplicationScore
 );
 
 export default applicationRouter;

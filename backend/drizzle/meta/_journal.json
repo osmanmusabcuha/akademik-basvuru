@@ -71,6 +71,13 @@
       "when": 1745917178645,
       "tag": "0009_flashy_shriek",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1745970242031,
+      "tag": "0010_real_living_lightning",
+      "breakpoints": true
     }
   ]
 }

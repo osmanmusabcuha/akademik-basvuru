@@ -14,3 +14,24 @@ export const getAllQuestions = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+export const getQuestionById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const question = await db
+      .select()
+      .from(applicationQuestions)
+      .where(eq(applicationQuestions.id, id))
+      .execute();
+
+    if (question.length === 0) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    res.status(200).json(question[0]);
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
