@@ -12,8 +12,8 @@ Bu proje, aşağıdaki adımları izleyerek yerel ortamınızda çalıştırıla
 1. Depoyu klonlayın:
 
    ```bash
-   git clone https://github.com/kullaniciadi/proje-adi.git
-   cd proje-adi
+   git clone https://github.com/osmanmusabcuha/akademik-basvuru.git
+   cd akademik-basvuru && cd frontend
    ```
 
 2. Bağımlılıkları yükleyin:
