@@ -133,3 +133,26 @@ export const updateApplicationStatus = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const putApplicationScore = async (req, res) => {
+  const { id } = req.params;
+  const { totalScore } = req.body;
+
+  try {
+    const updatedApplication = await db
+      .update(applications)
+      .set({ totalScore })
+      .where(eq(applications.id, id))
+      .returning()
+      .execute();
+
+    if (updatedApplication.length === 0) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    res.status(200).json(updatedApplication[0]);
+  } catch (error) {
+    console.error("Error updating application score:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

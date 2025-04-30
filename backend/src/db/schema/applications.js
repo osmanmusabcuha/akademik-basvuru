@@ -13,6 +13,7 @@ export const applications = pgTable("applications", {
     .notNull(),
   status: varchar("status", { length: 255 }).notNull(),
   applicationDate: date("application_date").notNull(),
+  totalScore: integer("total_score").default(0),
 });
 
 export const applicationsRelations = relations(applications, ({ one }) => ({

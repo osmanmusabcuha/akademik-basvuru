@@ -94,3 +94,25 @@ export const getDocumentsByApplicationId = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+export const putScoreDocumentById = async (req, res) => {
+  const { documentId } = req.params;
+  const { score } = req.body;
+
+  try {
+    await db
+      .update(applicationDocuments)
+      .set({ score })
+      .where(eq(applicationDocuments.id, documentId))
+      .execute();
+
+    res.status(200).json({
+      message: "Document score updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating document score:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
