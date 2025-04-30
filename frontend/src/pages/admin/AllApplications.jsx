@@ -8,13 +8,11 @@ const AllApplications = () => {
 
   const navigate = useNavigate();
 
-  const { data: applicationsData } = useFetch(
+  const { data: applicationsData, fetchData: fetchAppData } = useFetch(
     "http://localhost:3000/api/applications",
     "GET",
     token
   );
-
-  console.log(applicationsData);
 
   const groupedApplications = applicationsData?.reduce((acc, application) => {
     const { postingId } = application;
@@ -31,6 +29,35 @@ const AllApplications = () => {
     navigate(`/dashboard/all-applications/${applicationId}`, {
       state: { applicationId, postingId, status, userId },
     });
+  };
+
+  const handleUpdateStatus = async (postingId) => {
+    const filteredApplications = applicationsData.filter(
+      (application) => application.postingId == postingId
+    );
+    console.log("Filtered Applications:", filteredApplications);
+    const maxScore = Math.max(
+      ...filteredApplications.map((application) => application.totalScore)
+    );
+    console.log("Max Score:", maxScore);
+
+    filteredApplications.forEach(async (application) => {
+      await fetch(
+        `http://localhost:3000/api/applications/${application.id}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            status:
+              application.totalScore == maxScore ? "onaylandı" : "reddedildi",
+          }),
+        }
+      );
+    });
+    fetchAppData();
   };
 
   return (
@@ -50,9 +77,21 @@ const AllApplications = () => {
             className="shadow-lg mb-4 max-w-full pb-4 flex flex-col justify-center gap-4 rounded-lg"
           >
             <h2 className="text-2xl rounded-t-lg p-2 border-b-1 px-6 flex items-center bg-gray-100 font-semibold mb-4 text-gray-800">
-              <p>
-                İlan ID: <span className="text-green-600">{postingId}</span>
-              </p>
+              <div className="flex gap-6">
+                <p>
+                  İlan ID: <span className="text-green-600">{postingId}</span>
+                </p>
+                {applications.every((app) => app.status == "puanlama-bitti") ? (
+                  <button
+                    className="hover:text-green-500 underline"
+                    onClick={() => handleUpdateStatus(postingId)}
+                  >
+                    Sonuclandır
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
             </h2>
             {applications.map((application) => (
               <div
@@ -84,19 +123,33 @@ const AllApplications = () => {
                     </p>
                   </div>
                 </div>
-                <button
-                  className="bg-green-600 w-full md:w-fit text-white px-6 py-3 rounded-lg text-md font-medium hover:bg-green-700 transition-colors duration-300"
-                  onClick={() =>
-                    handleClick(
-                      application.id,
-                      postingId,
-                      application.status,
-                      application.userId
-                    )
-                  }
-                >
-                  Detaylar
-                </button>
+                <div className="text-green-500 text-4xl md:text-3xl flex font-semibold">
+                  {application.status == "puanlama-bitti"
+                    ? application.totalScore
+                    : ""}
+                </div>
+                {application.status == "puanlama-bitti" ? (
+                  <button
+                    className="bg-gray-600 w-full md:w-fit text-white px-6 py-3 rounded-lg text-md font-medium hover:bg-gray-700 transition-colors duration-300"
+                    disabled
+                  >
+                    Detaylar
+                  </button>
+                ) : (
+                  <button
+                    className="bg-green-600 w-full md:w-fit text-white px-6 py-3 rounded-lg text-md font-medium hover:bg-green-700 transition-colors duration-300"
+                    onClick={() =>
+                      handleClick(
+                        application.id,
+                        postingId,
+                        application.status,
+                        application.userId
+                      )
+                    }
+                  >
+                    Detaylar
+                  </button>
+                )}
               </div>
             ))}
           </div>

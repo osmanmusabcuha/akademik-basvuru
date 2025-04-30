@@ -57,6 +57,23 @@ const data = {
       icon: IconFileDescription,
     },
   ],
+  navMenager: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
+      title: "İlanı Düzenle",
+      url: "/dashboard/manage-postings",
+      icon: IconFile,
+    },
+    {
+      title: "Başvurular",
+      url: "/dashboard/all-applications",
+      icon: IconFileDescription,
+    },
+  ],
   navUser: [
     {
       title: "Dashboard",
@@ -96,6 +113,7 @@ export function AppSidebar({ ...props }) {
     admin: data.navAdmin,
     aday: data.navUser,
     juri: data.navJury,
+    yonetici: data.navMenager,
   };
 
   const navItems = navItemsByRole[role] || [];

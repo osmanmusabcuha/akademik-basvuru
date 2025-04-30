@@ -10,12 +10,34 @@ const Evaluation = () => {
   const [documentScore, setDocumentScore] = useState(0);
   const [stateDocumentId, setStateDocumentId] = useState(null);
   const location = useLocation();
+  console.log(location.state);
   const { applicationId } = location?.state || {};
   const { data: evaluationsData, loading: evaluationsLoading } = useFetch(
     `http://localhost:3000/api/evaluations/application/${applicationId}`,
     "GET",
     token
   );
+
+  const {
+    data: applicationsData,
+    loading: applicationsLoading,
+    fetchData: fetchApplicationsData,
+  } = useFetch(`http://localhost:3000/api/applications/`, "GET", token);
+  console.log("Applications Data: ", applicationsData);
+
+  const applicationData = applicationsData?.find(
+    (application) => application.id === applicationId
+  );
+
+  console.log("Application Data: ", applicationData);
+
+  const { data: answerData, loading: answerLoading } = useFetch(
+    `http://localhost:3000/api/answers/application/${applicationId}`,
+    "GET",
+    token
+  );
+
+  console.log("Answer Data: ", answerData);
 
   const {
     data: applicationDocument,
@@ -34,15 +56,114 @@ const Evaluation = () => {
     fetchApplicationData();
   };
 
+  const handleTotalScore = async () => {
+    const totalDocumentScore = applicationDocument.reduce((acc, document) => {
+      if (document.score) {
+        return acc + document.score;
+      }
+      return acc;
+    }, 0);
+
+    const totalAnswerScore = answerData.reduce((acc, answer) => {
+      if (answer.score) {
+        return acc + answer.score;
+      }
+      return acc;
+    }, 0);
+    const totalScore = totalDocumentScore + totalAnswerScore;
+
+    console.log("Total Score: ", totalScore);
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/applications/${applicationId}/score`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            totalScore: totalScore,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update total score");
+      }
+      const responseStatus = await fetch(
+        `http://localhost:3000/api/applications/${applicationId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            status: "puanlama-bitti",
+          }),
+        }
+      );
+      if (!responseStatus.ok) {
+        console.error("Failed to update application status");
+      }
+      fetchApplicationData();
+      fetchApplicationsData();
+    } catch (error) {
+      console.error("Error updating total score:", error);
+    }
+  };
+
   const handleSubmitDocumentScore = async (documentScore) => {
     console.log("documentScore: ", documentScore);
     console.log("stateDocumentId: ", stateDocumentId);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/documents/${stateDocumentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            score: documentScore,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update document score");
+      }
+      fetchApplicationData();
+    } catch (error) {
+      console.error("Error updating document score:", error);
+    }
   };
 
   return (
     <>
       <div>
-        <h1 className="text-3xl font-bold m-2">Juri Degerlendirmeleri</h1>
+        {applicationsLoading && (
+          <div className="flex items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold">Loading...</h1>
+          </div>
+        )}
+        <div className="flex justify-between items-center bg-white shadow-md p-4 rounded-lg mb-4">
+          <h1 className="text-3xl font-bold m-2">Degerlendirme</h1>
+          {applicationData?.totalScore == 0 ? (
+            <button
+              onClick={handleTotalScore}
+              className="bg-green-600 hover:bg-green-700 p-2 rounded-md text-white font-semibold transition"
+            >
+              Puan Hesapla
+            </button>
+          ) : (
+            <p className="text-lg font-bold text-green-600">
+              Toplam Puan: {applicationData?.totalScore}
+            </p>
+          )}
+        </div>
+        <h1 className="text-2xl font-bold m-2">Juri Degerlendirmeleri</h1>
         {evaluationsLoading && (
           <div className="flex items-center justify-center h-screen">
             <h1 className="text-2xl font-bold">Loading...</h1>
@@ -61,7 +182,7 @@ const Evaluation = () => {
         )}
       </div>
       <div>
-        <h1 className="text-3xl font-bold m-2">Adayın Attıkları</h1>
+        <h1 className="text-3xl font-bold m-2">Adayın (Tablo-1) Attıkları</h1>
         {documentLoading && (
           <div className="flex items-center justify-center h-screen">
             <h1 className="text-2xl font-bold">Loading...</h1>
@@ -82,6 +203,19 @@ const Evaluation = () => {
             <h1 className="text-2xl font-bold">Henüz Değerlendirme Yok</h1>
           </div>
         )}
+      </div>
+      <div>
+        <h1 className="text-3xl font-bold m-2">Adayın (Tablo-3) Cevapları</h1>
+        {answerLoading && (
+          <div className="flex items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold">Loading...</h1>
+          </div>
+        )}
+        <div className="container max-w-full grid @min-6xl:grid-cols-2 grid-cols-1 gap-4">
+          {answerData?.map((answer) => (
+            <AnswerCard key={answer.id} answerData={answer} />
+          ))}
+        </div>
       </div>
       <ManageDialog open={open} onOpenChange={setOpen} title="Puanlama">
         <div className="flex flex-col gap-4">
@@ -170,6 +304,35 @@ const DocumentCard = ({ document, handleDocument }) => {
         <p className="mt-4 ml-2 text-green-600 font-bold">
           Puan: {document.score}
         </p>
+      )}
+    </div>
+  );
+};
+
+const AnswerCard = ({ answerData }) => {
+  return (
+    <div className="bg-white shadow-md rounded-xl p-4 border">
+      <h2 className="text-lg font-bold text-green-600 mb-2">
+        <span className="font-bold text-gray-800">Soru ID:</span>{" "}
+        {answerData.questionId}
+      </h2>
+      <p className="text-lg font-bold text-gray-600 mb-4">
+        <span className="font-bold text-gray-800">Cevap:</span>{" "}
+        {answerData.answer || "Boş"}
+      </p>
+      <p className="text-lg font-bold text-gray-600 mb-4">
+        <span className="font-bold text-gray-800">Puan:</span>{" "}
+        {answerData.score}
+      </p>
+      {answerData.filePath && (
+        <a
+          href={answerData.filePath}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+        >
+          İndir
+        </a>
       )}
     </div>
   );
