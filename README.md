@@ -22,7 +22,7 @@ Node.js tabanlı RESTful API. Kurulum ve çalıştırma adımları için:
 
 Aşağıda uygulama paneline ait örnek bir ekran görüntüsü yer almaktadır:
 
-![Panel Görseli](./assets/panel.png)
+![Panel Görseli](./assets/dashboard-k-banner.png)
 
 ## 🌐 Sayfa Yapısı
 
